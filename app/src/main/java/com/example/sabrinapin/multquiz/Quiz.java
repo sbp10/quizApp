@@ -17,12 +17,12 @@ public class Quiz {
 
     //how many questions are in the quiz
     public int size()  {
-        return myQuestions.size();
+        return mQuestions.size();
     }
 
     //what is name of quiz
     public String getName(){
-        return myQuestions.size();
+        return mTitle;
     }
 
     //get me a mf question
