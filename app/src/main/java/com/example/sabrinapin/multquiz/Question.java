@@ -6,7 +6,7 @@ package com.example.sabrinapin.multquiz;
 
 public class Question {
 
-    private String mQuestion; //this is the words that make up the physical question
+    private String mQuestionPhrase; //this is the words that make up the physical question
     private String mCorrAnswer; //correct answer
     private String[] mWAnswers; //array of incorrect answers
 
@@ -18,8 +18,8 @@ public class Question {
 
     //possibly need another constructor...but i'll get back to that later
 
-    public String getQuestion(){
-        return mQuestion;
+    public String getQuestionPhrase(){
+        return mQuestionPhrase;
     }
 
     public String getCorrectAnswer(){
