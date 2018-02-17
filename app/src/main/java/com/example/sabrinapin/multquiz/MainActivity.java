@@ -1,5 +1,6 @@
 package com.example.sabrinapin.multquiz;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 import android.content.Context;
 import android.widget.Toast;
 import android.util.Log;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private int mScore;
     private int mQuestionNum; //index used to determine when quiz is over and increments as questions progress
     private int mCorrect; //increments when user inputs correct
-    private int scoreBase; //how many questions there are
+    private String scoreBase; //how many questions there are
 
 
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         mQuestionView = (TextView) this.findViewById(R.id.question_text);
         mScoreView = (TextView) this.findViewById(R.id.score_view);
-       // scoreBase = mScoreView.getText().toString(); work on this in xml file perhaps
+//        scoreBase = mScoreView.getText().toString(); //work on this in xml file perhaps
         mButton1 =  (Button) this.findViewById(R.id.button1);
         mButton2= (Button) this.findViewById(R.id.button2);
         mButton3 = (Button) this.findViewById(R.id.button3);
@@ -46,11 +49,23 @@ public class MainActivity extends AppCompatActivity {
 
         //if statement about SavedInstanceState but I'm not sure why/what
 
+
         Context c = getApplicationContext();
+        newGame();
        // XMLQuizGenerator.createQuizes(c);
         //parser shit
 
-        //then restore quiz
+
+//        mQuiz = QuizGenerator.getQuiz();
+//        Question q = mQuiz.getQuestion(mQuestionNum);
+//        mQuestionView.setText(q.getQuestionPhrase());
+//        String[] mAnswers = Arrays.copyOf(q.getAnswers().keySet().toArray(), q.getAnswers().keySet().size(), String[].class);
+//        mButton1.setText(mAnswers[0]);
+//        mButton2.setText(mAnswers[1]);
+//        mButton3.setText(mAnswers[2]);
+//        mButton4.setText(mAnswers[3]);
+
+
     }
 
     //NOT doing left/right click
@@ -63,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
     public void updateScore(){
         mQuestionNum += 1;
         int numRemaining = mQuiz.size() - mQuestionNum;
-        String s = mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
-        mScoreView.setText(scoreBase+s);//may just need to remove scoreBase
+        String s =  String.format(" %d/%d with %d to go",mCorrect, mQuiz.size(),numRemaining);//mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
+        mScoreView.setText(s);//may just need to remove scoreBase
 
         if(mQuestionNum < mQuiz.size()){
             askQuestion(); // will be made further down in this class
@@ -91,14 +106,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void newGame()  {
+        mQuiz = QuizGenerator.getQuiz();
+        mQuestionNum = 0;
+        mScore = 0;
+        updateScore();
+        askQuestion();
+
+    }
+
     private void askQuestion(){
         Question q = mQuiz.getQuestion(mQuestionNum);
         mQuestionView.setText(q.getQuestionPhrase());
-        String[] mAnswers = (String[]) q.getAnswers().keySet().toArray();
+        String[] mAnswers = Arrays.copyOf(q.getAnswers().keySet().toArray(), q.getAnswers().keySet().size(), String[].class);
         mButton1.setText(mAnswers[0]);
         mButton2.setText(mAnswers[1]);
         mButton3.setText(mAnswers[2]);
-        mButton3.setText(mAnswers[3]);
+        mButton4.setText(mAnswers[3]);
+
     }
 
     public void localCallback(String rawString){
@@ -107,4 +132,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
+
 
