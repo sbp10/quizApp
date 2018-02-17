@@ -10,10 +10,11 @@
 
     <TextView
         android:id="@+id/question_text"
-        android:layout_width="193dp"
+        android:layout_width="256dp"
         android:layout_height="65dp"
         android:text="Questions go here: "
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
 
     <RelativeLayout
@@ -28,9 +29,10 @@
         android:id="@+id/score_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:text="text should display ratio correct over total"
         android:textSize="20sp" />
+        <!--android:layout_alignParentRight="true"-->
+
 
     <Button
         android:id="@+id/button1"
