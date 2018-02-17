@@ -50,8 +50,14 @@ public class MainActivity extends AppCompatActivity {
         //if statement about SavedInstanceState but I'm not sure why/what
 
 
+
         Context c = getApplicationContext();
         newGame();
+
+
+
+
+
        // XMLQuizGenerator.createQuizes(c);
         //parser shit
 
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         else{
             Toast.makeText(MainActivity.this, "the end", Toast.LENGTH_SHORT).show();
+            //TODO endGame() or restartGame() method
         }
 
     }
@@ -110,19 +117,53 @@ public class MainActivity extends AppCompatActivity {
         mQuiz = QuizGenerator.getQuiz();
         mQuestionNum = 0;
         mScore = 0;
-        updateScore();
+        String s =  String.format(" %d/%d with %d to go",mCorrect, mQuiz.size(),mQuiz.size());//mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
+        mScoreView.setText(s);//may just need to remove scoreBase
+//        updateScore();
         askQuestion();
 
     }
 
     private void askQuestion(){
-        Question q = mQuiz.getQuestion(mQuestionNum);
+        final Question q = mQuiz.getQuestion(mQuestionNum);
         mQuestionView.setText(q.getQuestionPhrase());
-        String[] mAnswers = Arrays.copyOf(q.getAnswers().keySet().toArray(), q.getAnswers().keySet().size(), String[].class);
+        final String[] mAnswers = Arrays.copyOf(q.getAnswers().keySet().toArray(), q.getAnswers().keySet().size(), String[].class);
         mButton1.setText(mAnswers[0]);
         mButton2.setText(mAnswers[1]);
         mButton3.setText(mAnswers[2]);
         mButton4.setText(mAnswers[3]);
+        mButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCorrect += q.getAnswers().get(mAnswers[0]);
+                updateScore();
+            }
+        });
+        mButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCorrect += q.getAnswers().get(mAnswers[1]);
+                updateScore();
+            }
+        });
+        mButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCorrect += q.getAnswers().get(mAnswers[2]);
+                updateScore();
+            }
+        });
+        mButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCorrect += q.getAnswers().get(mAnswers[3]);
+                updateScore();
+            }
+        });
+
+
+
+
 
     }
 
@@ -132,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
+
+
 
 
 
