@@ -1,6 +1,7 @@
 package com.example.sabrinapin.multquiz;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -27,10 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
     private String mAnswer;
 
-    private int mScore;
-    private int mQuestionNum; //index used to determine when quiz is over and increments as questions progress
-    private int mCorrect; //increments when user inputs correct
-    private String scoreBase; //how many questions there are
+//    private int mScore;
+//    private int mQuestionNum; //index used to determine when quiz is over and increments as questions progress
+//    private int mCorrect; //increments when user inputs correct
+//    private String scoreBase; //how many questions there are
+
+    private boolean finished;
 
 
 
@@ -82,18 +85,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateScore(){
-        mQuestionNum += 1;
-        int numRemaining = mQuiz.size() - mQuestionNum;
-        String s =  String.format(" %d/%d with %d to go",mCorrect, mQuiz.size(),numRemaining);//mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
-        mScoreView.setText(s);//may just need to remove scoreBase
+//        mQuestionNum += 1;
+//        int numRemaining = mQuiz.size() - mQuestionNum;
+//        String s =  String.format(" %d/%d with %d to go",mCorrect, mQuiz.size(),numRemaining);//mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
+        mScoreView.setText(mQuiz.updateScoreboard());//may just need to remove scoreBase
 
-        if(mQuestionNum < mQuiz.size()){
+        if(mQuiz.getQuestionNum() < mQuiz.size()){
             askQuestion(); // will be made further down in this class
         }
 
         else{
+            finished = true;
+
+            mQuestionView.setVisibility(View.INVISIBLE);
+            mScoreView.setText(mQuiz.processResults());
+
             Toast.makeText(MainActivity.this, "the end", Toast.LENGTH_SHORT).show();
             //TODO endGame() or restartGame() method
+
+            mButton1.setVisibility(View.INVISIBLE);
+            mButton4.setVisibility(View.INVISIBLE);
+            mButton2.setText("New Quiz?");
+            mButton3.setText("Exit");
+
+            mButton2.setBackgroundColor(Color.GREEN);
+            mButton3.setBackgroundColor(Color.RED);
+
+
+
+
+
         }
 
     }
@@ -115,17 +136,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void newGame()  {
         mQuiz = QuizGenerator.getQuiz();
-        mQuestionNum = 0;
-        mScore = 0;
-        String s =  String.format(" %d/%d with %d to go",mCorrect, mQuiz.size(),mQuiz.size());//mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
-        mScoreView.setText(s);//may just need to remove scoreBase
+        finished = false;
+//        String s =  String.format(" %d/%d with %d to go",mCorrect, mQuiz.size(),mQuiz.size());//mCorrect+"/"+mQuiz.size()+" questions correct with "+numRemaining+" questions remaining";
+        mScoreView.setText(mQuiz.updateScoreboard());//may just need to remove scoreBase
 //        updateScore();
         askQuestion();
 
     }
 
     private void askQuestion(){
-        final Question q = mQuiz.getQuestion(mQuestionNum);
+        final Question q = mQuiz.getQuestion(mQuiz.getQuestionNum());
         mQuestionView.setText(q.getQuestionPhrase());
         final String[] mAnswers = Arrays.copyOf(q.getAnswers().keySet().toArray(), q.getAnswers().keySet().size(), String[].class);
         mButton1.setText(mAnswers[0]);
@@ -135,35 +155,55 @@ public class MainActivity extends AppCompatActivity {
         mButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCorrect += q.getAnswers().get(mAnswers[0]);
-                updateScore();
+                if(!finished) {
+                    mQuiz.incrementScore(q.getAnswers().get(mAnswers[0]));
+                    updateScore();
+                }
             }
         });
         mButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCorrect += q.getAnswers().get(mAnswers[1]);
-                updateScore();
+                if(!finished) {
+                    mQuiz.incrementScore(q.getAnswers().get(mAnswers[1]));
+                    updateScore();
+                }
+                else {
+
+                }
             }
         });
         mButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCorrect += q.getAnswers().get(mAnswers[2]);
-                updateScore();
+                if(!finished) {
+                    mQuiz.incrementScore(q.getAnswers().get(mAnswers[2]));
+                    updateScore();
+                }
+                else {
+                    finish();
+                    System.exit(0);
+                }
             }
         });
         mButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCorrect += q.getAnswers().get(mAnswers[3]);
-                updateScore();
+                if(!finished) {
+                    mQuiz.incrementScore(q.getAnswers().get(mAnswers[3]));
+                    updateScore();
+                }
             }
         });
 
 
 
 
+
+    }
+
+
+    public void endGame()  {
 
     }
 
@@ -173,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
 
 
 
