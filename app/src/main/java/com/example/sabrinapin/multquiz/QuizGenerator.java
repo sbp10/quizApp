@@ -65,7 +65,7 @@ public class QuizGenerator {
 
         };
 
-        Quiz q = new Quiz("misc",list);
+        Quiz q = new LinearQuiz("misc",list);
         muhQuizzes.put(q.getTitle(), q);
     }
 
@@ -113,7 +113,7 @@ public class QuizGenerator {
 
         };
 
-        Quiz q = new Quiz("misc",list);
+        Quiz q = new LinearQuiz("misc",list);
         muhQuizzes.put(q.getTitle(), q);
     }
 
